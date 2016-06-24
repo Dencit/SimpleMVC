@@ -9,6 +9,7 @@ $users_get_HonBao = $db->get_results("select * from ".USR_GET." g left join ". U
 
 print_r($users_get_HonBao);
 
+
 $whereArray['uid']='1';
 $user= $base->rowSelect(USR,$whereArray);
 print_r($user);
