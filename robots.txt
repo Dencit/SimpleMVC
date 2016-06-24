@@ -1,0 +1,17 @@
+User-agent: *
+Disallow:/
+Disallow:/.idea
+Disallow:/auth.php
+Disallow:/index.php
+Disallow:/share.php
+Disallow:/testInit.php
+
+Disallow:/Admin
+Disallow:/Admin/index.php
+Disallow:/Admin/usrXsl.php
+
+Disallow:/Common
+Disallow:/Library
+Disallow:/Model
+Disallow:/Public
+
