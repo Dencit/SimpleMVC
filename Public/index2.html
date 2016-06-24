@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+	<meta content="yes" name="apple-mobile-web-app-capable">
+	<meta content="black" name="apple-mobile-web-app-status-bar-style">
+	<meta content="telephone=no" name="format-detection">
+	<meta content="email=no" name="format-detection">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<meta name="x5-orientation" content="portrait">
+	<link rel="stylesheet" href="css/style.css" />
+	<!--<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>-->
+	<script src="js/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+
+	<!--loading-->
+	<section id="loading" class="loader">
+		<div class="spinner">
+			<p><img src="images/loading.svg" /></p>
+			<p>加载中……</p>
+		</div>
+	</section>
+	<!--//loading-->
+
+
+
+	<p>index2</p>
+
+
+
+	<script src="js/common.js"></script>
+	<script src="js/jsonAct.js"></script>
+	<script src="js/index2.js"></script>
+	<!--<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" ></script>-->
+	<script type="text/javascript" src="js/jweixin-1.0.0.js" ></script>
+	<script type="text/javascript" src="js/weixinShare.js" ></script>
+
+	<script>
+
+		$(window).load(function(){
+
+			__get({"page":'index2',"state":'usrState'},$index2Url);//显示
+
+            __post({"page":'index2',"state":'usrLottery'},$index2Url);//显示
+
+			$playState='noPlay';
+			__jweixin();
+
+			$("#loading").fadeOut();
+		});
+
+		$(document).ready(function(){
+
+		});
+
+
+
+	</script>
+
+</body>
+</html>
