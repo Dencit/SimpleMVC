@@ -46,8 +46,8 @@ if(!$user){
     }
 
     $whereArray['openid']=$openid;
-    $user= $base->rowSelect(USR,$whereArray);
-
+    $user= $base->rowSelect(USR,'*',$whereArray);
+    
     $uid_get=$user->uid;
     $_SESSION[PREFIX.'uid']=$uid_get;
 
