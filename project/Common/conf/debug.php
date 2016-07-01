@@ -11,17 +11,17 @@ define('DEBUG_URL','cn');
 switch(DEBUG_URL){
     case 'cn' :
         //redirect_uri
-        define('OAUTH2_URI','http://mld.api.189go.cn/OAuth2');
+        define('OAUTH2_URI','http://smvc.somatop.com/weiWebApi/OAuth2');
         //access_token
-        define('ACCESS_TOKEN','http://mld.api.189go.cn/access_token');
+        define('ACCESS_TOKEN','http://smvc.somatop.com/weiWebApi/access_token');
 
         break;
     case 'test':
 
         //redirect_uri
-        define('OAUTH2_URI','http://mld.api.189go.test/OAuth2');
+        define('OAUTH2_URI','http://smvc.somatop.test/weiWebApi/OAuth2');
         //access_token
-        define('ACCESS_TOKEN','http://mld.api.189go.test/access_token');
+        define('ACCESS_TOKEN','http://smvc.somatop.test/weiWebApi/access_token');
 
         break;
 }

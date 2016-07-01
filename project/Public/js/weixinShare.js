@@ -1,11 +1,11 @@
 //jsWeixin api
 var url = location.href.split('#')[0];
 url = encodeURIComponent(url);
-var appid = "wxdcf8b6c546750b08";//mld
-var ajaxLink= "http://mld.api.189go.cn/mld.php";
+var appid = "wxdcf8b6c546750b08";
+var ajaxLink= "http://smvc.somatop.com/weiWebApi/jsApi.php";
 
-var allLink="http://webtest.189go.cn/testProj";
-var allImgLink="http://webtest.189go.cn/testProj";
+var allLink="http://smvc.somatop.com/project";
+var allImgLink="http://smvc.somatop.com/project/Public/images";
 
 //在这里定义微信分享内容
 var __noPlayData = {
@@ -22,7 +22,7 @@ var __shareData = {
     title: "已参与标题", // 分享标题
     desc: "已参与描述", // 分享描述
     link: allLink+'/share.php', //分享链接
-    imgUrl: allImgLink+'/Public/images/icon.jpg',//分享小图
+    imgUrl: allImgLink+'/icon.jpg',//分享小图
     success:function () {
         window.location.href='./index2.html';
     },

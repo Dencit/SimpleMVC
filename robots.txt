@@ -1,6 +1,11 @@
 User-agent: *
 Disallow:/
 Disallow:/.idea
+
+Disallow:/project
+Disallow:/pushApi
+Disallow:/weiApi
+
 Disallow:/auth.php
 Disallow:/index.php
 Disallow:/share.php

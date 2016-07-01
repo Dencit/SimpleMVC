@@ -2,7 +2,7 @@
 /** Created by [SOMA]User:陈鸿扬 Date: 2016/6/2 Time: 11:21 **/
 class authApi{
 
-    private static $account = "heyi";
+    private static $account = "somatop";
     private static $passwd = "WE2d9QWyr8Bd9TY";
 
     public function __construct(){

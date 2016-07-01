@@ -1,23 +1,24 @@
 <?php
+/*phpinfo();exit;*/
+
 require_once('./Common/app.php');//全局变量，路径不能用路径映射变量
 require_once("./testInit.php");//pc端测试用//
 
 
-$sid_get=isset($_GET['sid'])?$_GET['sid']:'';
-/*print($sid_get);exit;*/
-
 $openid = isset($_SESSION[PREFIX.'openid']) ? trim($_SESSION[PREFIX.'openid']) : '';
 $access_token = isset($_SESSION[PREFIX.'access_token']) ? trim($_SESSION[PREFIX.'access_token']) : '';
 
+
 if(!$openid||!$access_token){
-    authApi::usrAuth("http://webtest.189go.cn/testProj/auth.php?sid=".$sid_get,"snsapi_base");
+    authApi::usrAuth("http://smvc.somatop.com/project/auth.php","snsapi_userinfo");
 }
 
 $whereArray['openid']=$openid;
-$user= $base->rowSelect(USR,$whereArray);
+$user= $base->rowSelect(USR,'*',$whereArray);
 //print_r($user);exit;
 
 if(!$user){
+
 
     $data = weiApi::usrInfo($openid,$access_token);
     $globeAccessToken=authApi::globeAccessToken();
@@ -38,24 +39,29 @@ if(!$user){
     $ipGet=tool::get_ip();
     $info['ip']=$ipGet;
 
+
     $userInsert=$base->rowInsert(USR,$info);
     if(!$userInsert) {
         exit("fail to add user !");
     }
 
     $whereArray['openid']=$openid;
-    $user= $base->rowSelect(USR,$whereArray);
-
+    $user= $base->rowSelect(USR,'*',$whereArray);
+    
     $uid_get=$user->uid;
     $_SESSION[PREFIX.'uid']=$uid_get;
 
 }
 
+//用户有登记的情况
+
+
 $uid_get=$user->uid;
 $_SESSION[PREFIX.'uid']=$uid_get;
 $sub_L=$user->subscribe;
 
-if(!isset($_GET['ts'])) {
+
+if(!isset($_GET['ts'])){
 
     //更新微信用户资料
     $data = weiApi::usrInfo($openid,$access_token);
@@ -70,6 +76,7 @@ if(!isset($_GET['ts'])) {
     $dataArray['headimgurl'] = isset($data->headimgurl)?$data->headimgurl:'';
 
     $userUpdate=$base->rowUpdate(USR,$dataArray,$where);//检测到数据重复 会跳过更新
+
 
     //检查关注状态
     $globeAccessToken=authApi::globeAccessToken();
@@ -86,13 +93,7 @@ if(!isset($_GET['ts'])) {
         }
 
     }
-
 }
 
+jump::head("./Public/index.html");
 
-//如果用户访问自己的分享链接 就跳到首页。
-if($sid_get==$uid_get){
-    jump::head("./Public/index.html");
-}
-
-jump::head("./Public/share.html#share=&sid=".$sid_get);
