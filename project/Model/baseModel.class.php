@@ -7,8 +7,6 @@ use \model\wpDb;
 
 class baseModel extends wpDb {
 
-    public $uid_get='';
-    public $sid_get='';
     public $wpDb='';
 
     function __construct(){
