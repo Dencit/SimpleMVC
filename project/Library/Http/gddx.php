@@ -38,7 +38,7 @@ class gddx{
 
 
 
-    //������֤��
+    //发送验证码
     public static function sms($mobile = "",$code = ""){
         $url = "http://www.mini189.cn/fans_interface/msg/sendCheckCode/$mobile/$code";
         $data = self::http($url);
@@ -49,7 +49,7 @@ class gddx{
         }
     }
 
-    //�����ѯ
+    //网龄查询
     public static function age($mobile = ""){
         $url = "http://www.mini189.cn/yqt_fans/interface/phoneNumber/$mobile";
         $data = self::http($url);

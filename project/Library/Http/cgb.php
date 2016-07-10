@@ -20,29 +20,6 @@ class cgb{
         return $data;
     }
 
-
-//全局授权
-   /* public static function headAll($redirect_uri = '',$scope = 'snsapi_base'){
-        $account = "heyi";
-        $passwd = "WE2d9QWyr8Bd9TY";
-        $time = time();
-        $sign = "access".$account.$passwd.$time."token";
-        $url = "http://gf.api.189go.cn/access_token/?acc=$account&time=$time&sign=".md5($sign);
-        header("location:".$url);
-        exit;
-    }*/
-//获取用户详细信息
-   /* public static function getAll($openid = '',$access_token = ''){
-        $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$access_token&openid=$openid&lang=zh_CN";
-        $data = self::http($url);
-        if ($data){
-            $data = json_decode($data);
-        }
-        return $data;
-    }*/
-//
-
-
 //用户在关注了公众号之后获取其nickname、headimgurl等信息
     public static function subscribe($openid = ''){
         $access_token = self::get_access_token();

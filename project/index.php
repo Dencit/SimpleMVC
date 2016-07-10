@@ -4,10 +4,8 @@
 require_once('./Common/app.php');//全局变量，路径不能用路径映射变量
 require_once("./testInit.php");//pc端测试用//
 
-
 $openid = isset($_SESSION[PREFIX.'openid']) ? trim($_SESSION[PREFIX.'openid']) : '';
 $access_token = isset($_SESSION[PREFIX.'access_token']) ? trim($_SESSION[PREFIX.'access_token']) : '';
-
 
 if(!$openid||!$access_token){
     authApi::usrAuth("http://smvc.somatop.com/project/auth.php","snsapi_userinfo");
@@ -53,6 +51,8 @@ if(!$user){
 
 }
 
+
+
 //用户有登记的情况
 
 
@@ -94,6 +94,8 @@ if(!isset($_GET['ts'])){
 
     }
 }
+
+
 
 jump::head("./Public/index.html");
 

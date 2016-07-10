@@ -36,30 +36,7 @@ class gzdx{
         return $data;
     }
 
-
-/*    public static function qrcode($cardid){
-        $client_id = "shell151198";
-        $client_secret = "f948aab3-fc27-4134-b036-48dddf715bf6";
-
-        $client_sign = md5("client_id=$client_id&client_secret=$client_secret&stimestamp=".TIME);
-        $url = "http://wxmkt.gdshellcard.com/shell/frontend/apicreatecard/cardshell.php?client_sign=$client_sign&client_id=$client_id&stimestamp=".TIME."&cardid=$cardid";
-        $data = self::http($url);
-        if(!$data){
-            return false;
-        }
-        $data = json_decode($data);
-        if($data->result != 1 || $data->msg != "ok"){
-            return false;
-        }
-        $data = $data->data;
-        if($data->qrcodeurl){
-            return $data->qrcodeurl;
-        }else{
-            return false;
-        }
-    }*/
-
-
+    
     //发送验证码
     public static function sms($mobile = "",$code = ""){
         $url = "http://www.mini189.cn/fans_interface/msg/sendCheckCode/$mobile/$code";

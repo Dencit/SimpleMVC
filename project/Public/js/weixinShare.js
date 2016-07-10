@@ -1,11 +1,19 @@
 //jsWeixin api
 var url = location.href.split('#')[0];
 url = encodeURIComponent(url);
-var appid = "wxdcf8b6c546750b08";
-var ajaxLink= "http://smvc.somatop.com/weiWebApi/jsApi.php";
 
+//mld
+var appid = "wxdcf8b6c546750b08";
+var ajaxLink= "http://mld.api.189go.cn/mld.php";
 var allLink="http://smvc.somatop.com/project";
 var allImgLink="http://smvc.somatop.com/project/Public/images";
+
+//test
+/*var appid = "wx22fdde40b1df22d7";
+var ajaxLink= "http://smvc.somatop.com/weiWebApi/jsApi.php";
+var allLink="http://smvc.somatop.com/project";
+var allImgLink="http://smvc.somatop.com/project/Public/images";*/
+
 
 //在这里定义微信分享内容
 var __noPlayData = {

@@ -14,14 +14,11 @@ foreach ($defined_vars as $key => $val) {
 }
 unset($defined_vars);
 
-//时间
-define('TIME',time());
-//host
-
 
 //redis保存session
-/*ini_set("session.save_handler","redis");
-ini_set("session.save_path","tcp://127.0.0.1:6379");*/
+
+ini_set("session.save_handler","redis");
+ini_set("session.save_path","tcp://127.0.0.1:6379?auth=soma5036");
 
 ob_start();
 session_start();
