@@ -1,0 +1,34 @@
+/*design bootstrap*/
+.badge_diy{line-height: 10px;}
+
+.tab-content{ border:1px solid #ddd; border-top:0; padding: 2rem; }
+
+.table>tbody>tr>th ,.table>tbody>tr>td ,.table >thead>tr>th{ line-height: 3rem; }
+
+.navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse{max-height: inherit;}/*修改悬浮导航的最大高度*/
+/*#design bootstrap*/
+
+/*common*/
+.padding{ display: inline; padding: 0 1rem; }
+
+.th_nomal{width:6rem;}
+.th_2x{width:12rem;}
+.th_edit,.th_del{ width: 6rem; }
+
+._txt,._keywords,._picture,._audio,._video,._picTxt{display:none;}/*新增和编辑共有*/
+._replyType,._send{display:none;}
+
+.footer {
+    width: 100%; position: fixed; bottom: 0;
+    border-top: 1px solid #E5E5E5; background-color: #f8f8f8;
+    text-align:center; color: #767676;
+    padding: 1rem 0; margin-top: 100px;
+    z-index: 9;
+}
+.footer p{ margin: 0; }
+/*#common*/
+
+
+
+
+
