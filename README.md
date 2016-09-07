@@ -1,7 +1,7 @@
 # SimpleMVC
 "PHP-SimpleMVC-SMVC“ : 微信应用 轻量级MVC框架
 #
-框架说明：reme.docx
+框架使用教程：reme.docx
 #
 Author ：Dencit[陈鸿扬]
 #
