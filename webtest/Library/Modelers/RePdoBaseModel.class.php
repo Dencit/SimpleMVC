@@ -90,16 +90,27 @@ class RePdoBaseModel extends PdoDB{
         if( self::$just!=1 ){
             $reRowSelect=self::$redis->reRowSelect($reTable,$reField);
             //$reRowDel=self::$redis->reRowDel($reTable,$reField); //var_dump($reRowDel);//
+            //var_dump($reRowSelect);exit;//
             if(!$reRowSelect){
                 $rowSelect=$this->preQuery($query,'row');//pdo
-                $reRowInsert=self::$redis->reRowInsert($reTable,$reField,$rowSelect,self::$ttl);
-                if($reRowInsert){
-                    self::$ttl='';
-                    $reRowSelect=self::$redis->reRowSelect($reTable,$reField);
+                //var_dump($rowSelect);exit;//
+                if($rowSelect){
+                    $reRowInsert=self::$redis->reRowInsert($reTable,$reField,$rowSelect,self::$ttl);
+                    if($reRowInsert){
+                        self::$ttl='';
+                        $reRowSelect=self::$redis->reRowSelect($reTable,$reField);
+                    }else{
+                        return false;
+                    }
+                }else{
+                    return false;
                 }
             }
+
+
             $rowSelect=$reRowSelect;
             self::$just='';//
+
         }
         else{
             $rowSelect=$this->preQuery($query,'row');//pdo
@@ -143,19 +154,32 @@ class RePdoBaseModel extends PdoDB{
         if( self::$just!=1 ){
             $reRowSelect=self::$redis->reRowSelect($reTable,$reField);
             //$reRowDel=self::$redis->reRowDel($reTable,$reField); //var_dump($reRowDel);//
+            //var_dump($reRowSelect);exit;//
             if(!$reRowSelect){
                 $resultSelect=$this->preQuery($query,'class');//pdo
-                $reRowInsert=self::$redis->reRowInsert($reTable,$reField,$resultSelect,self::$ttl);
-                if($reRowInsert){
-                    self::$ttl='';
-                    $reRowSelect=self::$redis->reRowSelect($reTable,$reField);
+                //var_dump($resultSelect);exit;
+                if($resultSelect){
+                    $reRowInsert=self::$redis->reRowInsert($reTable,$reField,$resultSelect,self::$ttl);
+                    if($reRowInsert){
+                        self::$ttl='';
+                        $reRowSelect=self::$redis->reRowSelect($reTable,$reField);
+
+                    }else{
+                        return false;
+                    }
+                }else{
+                    return false;
                 }
+
             }
+
             $resultSelect=$reRowSelect;
             self::$just='';
+
         }
         else{
             $resultSelect=$this->preQuery($query,'class');//pdo
+            //var_dump($resultSelect);exit;//
             $reRowUpdate=self::$redis->reRowUpdate($reTable,$reField,$resultSelect,self::$ttl);
             if($reRowUpdate){
                 self::$ttl='';
@@ -167,6 +191,8 @@ class RePdoBaseModel extends PdoDB{
         //\\redis
 
         if(self::$debug){ tsTool::debugMsg(__METHOD__,$resultSelect,'return'); }//测试
+
+        //var_dump($resultSelect);exit;//
 
         if( !empty($resultSelect) ){
             return $resultSelect;

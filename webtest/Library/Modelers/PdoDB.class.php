@@ -161,6 +161,7 @@ class PdoDB {
 
         if(self::$debug){ tsTool::debugMsg(__METHOD__,$queryGroup[1],'return'); }//调试用
 
+
         return $result;
     }
     protected function forBindParam($kval=null,$stmt=null){
@@ -223,6 +224,7 @@ class PdoDB {
                 break;
             case 'row':
                 $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                $result=$this->allArray2object($result);
                 break;
             default:break;
         }
@@ -455,7 +457,7 @@ class PdoDB {
 
         $repStr=preg_replace("/`/i",'',$arr[1] );
         //var_dump($repStr);exit;
-        preg_match_all("/(\S+)[\=|(LIKE)]\'(\S+)\'/i",$repStr,$where);
+        preg_match_all("/(\S+)[\=|(LIKE)][\'|](\S+)[\'|]/i",$repStr,$where);
         //var_dump($where);exit;//
         $whereArr =  array_combine($where[1],$where[2]);
         foreach($whereArr as $k=>$v){
@@ -639,6 +641,58 @@ class PdoDB {
         return $sign;
     }
 
+
+////
+    //数组转json
+     function arrObj2json($arrObj){
+        if (is_object($arrObj) || is_array($arrObj)) {
+            return json_encode($arrObj,JSON_UNESCAPED_UNICODE);
+        }
+    }
+    //数组第二层转换
+     function object2array($obj) {
+        if (is_object($obj)) {
+            $array=new \ArrayObject();
+            foreach ($obj as $key => $val) {
+                $array[$key] = $val;
+            }
+        }else { $array = $obj; }
+        return $array;
+    }
+     function array2object($array) {
+        if (is_array($array)) {
+            $obj = new \StdClass();
+            foreach ($array as $key => $val){
+                $obj->$key = $val;
+            }
+        }
+        else { $obj = $array; }
+        return $obj;
+    }
+    //数组全部转换
+     function allObject2array($obj) {
+        if (is_object($obj)) {
+            $array=new \ArrayObject();
+            foreach ($obj as $key => $val) {
+                if(is_object($val)){ $obj->$key=$this->allObject2array($val); }
+                else{ $array[$key] = $val; }
+            }
+        }else { $array = $obj; }
+        return $array;
+    }
+     function allArray2object($array) {
+        if (is_array($array)) {
+            $obj = new \StdClass();
+            foreach ($array as $key => $val){
+                if(is_array($val)){ $obj->$key=$this->allObject2array($val); }
+                else{ $obj->$key = $val; };
+            }
+        }
+        else { $obj = $array; }
+        return $obj;
+    }
+
+//\\
 
 
 } 

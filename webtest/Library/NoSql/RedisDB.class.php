@@ -242,6 +242,13 @@ class RedisDB {
             }
 
             if(self::$debug){ tsTool::debugMsg(__METHOD__,$array,'return'); }//测试
+
+            if(isset($array[0]) && is_object($array[0])){
+                $array=$this->object2array($array);//索引行数据: 如果第二层为对象 则 将第一层转数组
+            }else{
+                $array=$this->allArray2object($array);//单行数据: 直接转对象
+            }
+
             return $array;
         }
 

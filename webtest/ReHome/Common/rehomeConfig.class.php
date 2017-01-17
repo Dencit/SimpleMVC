@@ -5,7 +5,7 @@ namespace Commons;
 
 use stdClass as stdClass;
 
-class homeConfig extends config {
+class rehomeConfig extends config {
 
     function __construct($data=null){
 
@@ -19,7 +19,7 @@ class homeConfig extends config {
 
         $config->DB=new stdClass();
         $config->DB->USER='root';
-        $config->DB->PASSWD='[PASS_WORD]';
+        $config->DB->PASSWD='bangju2015';
         $config->DB->NAME='webtest';
         $config->DB->HOST='127.0.0.1';
         $config->DB->DBMS='mysql';
@@ -70,7 +70,7 @@ class homeConfig extends config {
 
 
         $config->FRAME=new stdClass();
-        $config->FRAME->ROOT_PROJECT='Home';//为空则默认根目录//当前项目主目录 controler.class.php , model.class.php 调用
+        $config->FRAME->ROOT_PROJECT='ReHome';//为空则默认根目录//当前项目主目录 controler.class.php , model.class.php 调用
         $config->FRAME->ROOT_CONTROLER='Controler';//二级目录//控制器目录//controler.class.php 调用
         $config->FRAME->ROOT_MODELER='Modeler';//二级目录//数据模型目录//model.class.php 调用
         $config->FRAME->BASE_MODELER='WpBaseModel';//默认公用模型//wpBaseModel.class.php 调用

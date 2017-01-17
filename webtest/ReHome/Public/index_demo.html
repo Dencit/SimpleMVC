@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+	<meta content="yes" name="apple-mobile-web-app-capable">
+	<meta content="black" name="apple-mobile-web-app-status-bar-style">
+	<meta content="telephone=no" name="format-detection">
+	<meta content="email=no" name="format-detection">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<meta name="x5-orientation" content="portrait">
+	<link rel="stylesheet" href="css/style.css" />
+
+	<!--<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>-->
+	<script src="../../Static/jquery/jquery-2.1.1.min.js"></script>
+
+    <script src="js/weivv_test.js"></script>
+    <!--<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" ></script>-->
+    <script type="text/javascript" src="../../Static/weixin/jweixin-1.0.0.js" ></script>
+    <script type="text/javascript" src="js/weixinJsApi.js" ></script>
+
+
+</head>
+<body>
+
+	<!--loading-->
+	<section id="loading" class="loader">
+		<div class="spinner">
+			<p><img src="images/loading.svg" /></p>
+			<p>加载中……</p>
+		</div>
+	</section>
+	<!--//loading-->
+
+	<section wvv="page1" >首页</section>
+
+    <section wvv="page2" >
+        <div block="block1">
+            <b field="list1" >list one</b>
+            <input field="list2" value="list tow" />
+            <select field="list3" >
+                <option value="list three" checked>list three</option>
+                <option value="list four">list four</option>
+            </select>
+            <textarea field="list5">list five</textarea>
+        </div>
+    </section>
+
+    <section wvv="page3" >选项详情
+
+        <div block="block1">
+            <div field="list1" >page3 list one</div>
+            <input field="list2" value="page3 list tow" />
+            <select field="list3" >
+                <option value="page3 list three" checked>list three</option>
+                <option value="page3 list four">list four</option>
+            </select>
+            <textarea field="list5">page3 list five</textarea>
+        </div>
+
+    </section>
+
+    <section wvv="page4" >选择结果
+
+        <div block="block1">
+
+            <ul list="List1">
+                <li >
+                    <div field="list1" >page4 list one</div>
+                    <input field="list2" value="page4 list tow" />
+                    <select field="list3" >
+                        <option value="list three" checked>list three</option>
+                        <option value="list four">list four</option>
+                    </select>
+                    <textarea field="list5">page4 list five</textarea>
+                </li>
+                <li >
+                    <div field="list1" >page4 list one</div>
+                    <input field="list2" value="page4 list tow" />
+                    <select field="list3" >
+                        <option value="list three" checked>list three</option>
+                        <option value="list four">list four</option>
+                    </select>
+                    <textarea field="list5">page4 list five</textarea>
+                </li>
+            </ul>
+
+
+        </div>
+
+    </section>
+    <section wvv="share" >_shareTip</section>
+    <section wvv="page5" >分享后展示页
+
+        <div block="block1">
+        <ul list="List1">
+            <li >
+                <div field="list1" ></div>
+                <input field="list2" value="" />
+                <select field="list3" >
+                    <option value="list three" checked>list three</option>
+                    <option value="list four">list four</option>
+                </select>
+                <textarea field="list5"></textarea>
+            </li>
+        </ul>
+        </div>
+
+    </section>
+
+    <script>
+
+        wvv.init();//前端框架初始化
+
+        wvv.page('page2').block('block1').thisData('get',{}).toGet('../?/indexAx/testGet',function(result){
+            wvv.msgbox(result,2);
+            //console.log('here');console.log(result);
+            wvv.page('page2','show');
+        });
+
+        wvv.page('page5').block('block1').List('List1').thisListData('get',{}).toGetList('../?/indexAx/testGetList',function(result){
+            wvv.msgbox(result,2);
+            //console.log(result.data[0]);//
+            wvv.page('page5','show');
+        });
+
+        wvv.page('page3','show').block('block1').thisData('post').check(function(submitData){
+            //console.log(submitData);//
+            //alert('fail');return false;//
+        }).toPost('../?/indexAx/testPost',function(result){
+            wvv.msgbox(result,2);
+        });
+
+
+        wvv.page('page4','show').block('block1').List('List1').thisListData('post').listCheck(function(listSubmitData){
+            //console.log(listSubmitData);//
+            //alert('fail');return false;//
+        }).toPostList('../?/indexAx/testPostList',function(result){
+            wvv.msgbox(result,2);
+        });
+
+
+        wvv.page('share','show');
+
+
+/*
+
+
+        wvv.post('../?/indexAx/usrState','',function(result){
+            wvv.msgbox(result,2);//微信登陆检验
+        },1);
+
+        $(document).ready(function(){
+
+			$playState='noPlay';
+            __noPlayData.title="未参与标题修改";
+            __noPlayData.desc="未参与描述修改";
+            __noPlayData.link=host+"/HolyEgg/?/weixin/index";
+            __noPlayData.imgUrl=host+"/HolyEgg/Public/images/icon.jpg";
+			__jweixin();
+
+		});
+
+
+*/
+        $(window).load(function(){
+            $("#loading").fadeOut();
+        });
+
+
+    </script>
+
+</body>
+</html>
