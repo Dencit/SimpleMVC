@@ -1,20 +1,53 @@
 <?php
 /* Created by User: soma Worker: 陈鸿扬 Date: 16/7/28  Time: 09:27 */
 
-require_once('../Common/app.php');
+require_once('../Library/system.php');
 
-require_once(LIB_COMMONS.'/probability.class.php');//概率工具组
-require_once(LIB_3RD.'/aliDayu.php');//大于短信类
+////继承补充
 
-define('ROOT_PROJECT','Admin');//当前项目主目录 controler.class.php , model.class.php 调用
-define('ROOT_CONTROLER','Controler');//二级目录//控制器目录//controler.class.php 调用
-define('ROOT_MODELER','Modeler');//二级目录//数据模型目录//model.class.php 调用
+    require_once(LIB_COMMONS.'/probability.class.php');//概率工具组
+    require_once(LIB_3RD.'/aliDayu.php');//大于短信类
 
-$controler=new \controlers\controler();
-$controler->uri('Path_Info');//开始侦听url路由参数,加载 controler 虚拟页面
+    require_once(LIB_COMMONS.'/emoji.php');//微信默认表情转换
+    require_once(LIB_HTTPS.'/authApi.class.php');//微信api
+    require_once(LIB_HTTPS.'/weiApi.class.php');//微信api
+
+    require_once(LIB_MODELS.'/WpDb.class.php');//绝对路径加载//相对路径容易出错
+    require_once(LIB_MODELS.'/WpBaseModel.class.php');
+
+    require_once(ROOT.'/Admin/Common/adminConfig.class.php');
+    require_once(ROOT.'/Admin/Controler/adminBase.class.php');
+    require_once(ROOT.'/Admin/Modeler/adminBase.class.php');
+
+//\\
+
+    //调试信息开关
+    ini_set("display_errors","On");
+    error_reporting(E_ALL);
+
+    //session 前缀
+    define('PREFIX','test_');
+    //框架调试开关
+    define('FRAM_DEBUG','on');
+
+    //redis保存session
+    ini_set("session.save_handler","redis");
+    ini_set("session.save_path","tcp://127.0.0.1:6379?auth=[PASS_WORD]");
+    ob_start();
+    session_start();
 
 
+////框架设置
 
+
+    $frameConfig=new \Commons\adminConfig();
+    $FRAME=$frameConfig->data('FRAME');
+
+    $controler=new \controlers\controler($FRAME);
+    $controler->listenUri();//开始侦听url路由参数,加载 controler 虚拟页面
+
+
+//\\框架设置
 
 
 

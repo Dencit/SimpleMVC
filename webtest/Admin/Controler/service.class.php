@@ -5,16 +5,17 @@ namespace Controlers;
 
 use \Commons\tool as tool;//工具类
 use \Commons\jump as jump;
-use Debugs\frameDebug as FD;
-
 use \Controlers\urlSerial as I;
+
 use \Modelers\model as model;//model装载器
 use \Views\view as V;
 
-use \Https\weiApi as weiApi;//微信API
-use Commons\probability as probability;//概率工具组
 
-class service extends baseControler {
+class service extends adminBase {
+
+    function __construct(){
+        parent::__construct();//初始化 父类的构造函数
+    }
 
     function advisory(){
 

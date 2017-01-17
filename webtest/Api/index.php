@@ -1,0 +1,47 @@
+<?php
+/* Created by User: soma Worker:陈鸿扬  Date: 16/10/28  Time: 09:26 */
+
+require_once('../Library/system.php');
+
+
+////继承补充
+
+require_once(LIB_APIS.'/weiApi.class.php');//api接口类
+require_once(LIB_APIS.'/weicoApi.class.php');//api接口类
+
+require_once(LIB_MODELS.'/WpDb.class.php');//绝对路径加载//相对路径容易出错
+require_once(LIB_MODELS.'/WpBaseModel.class.php');
+
+require_once(ROOT.'/Api/Common/apiConfig.class.php');
+require_once(ROOT.'/Api/Controler/apiBase.class.php');
+require_once(ROOT.'/Api/Modeler/apiBase.class.php');
+
+//\\
+
+//调试信息开关
+ini_set("display_errors","On");
+error_reporting(E_ALL);
+
+//session 前缀
+define('PREFIX','test_api_');
+//框架调试开关
+define('FRAM_DEBUG','on');
+
+
+//redis保存session
+ini_set("session.save_handler","redis");
+ini_set("session.save_path","tcp://127.0.0.1:6379?auth=[PASS_WORD]");
+ob_start();
+session_start();
+
+
+////框架设置
+
+$frameConfig=new \Commons\apiConfig();
+$FRAME=$frameConfig->data('FRAME');
+
+$controler=new \controlers\controler($FRAME);
+$controler->listenUri('Rewrite');//开始侦听url路由参数,加载 controler 虚拟页面
+
+//\\框架设置
+

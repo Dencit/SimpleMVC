@@ -6,7 +6,7 @@ define( 'DB_COLLATE', 'utf8' );//数据为编码
 define( 'DB_CHARSET', 'utf8' );//数据为编码
 define( 'DEBUG',false);//
 
-class wpDb {
+class WpDb {
 
     /**
      * Whether to show SQL/DB errors

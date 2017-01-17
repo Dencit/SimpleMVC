@@ -5,105 +5,78 @@ namespace Controlers;
 
 use \Commons\tool as tool;//工具类
 use \Commons\jump as jump;
-use \Controlers\urlSerial as I;
 
 use \Modelers\model as model;//model装载器
+use \Controlers\urlSerial as I;
+
 use \Https\weiApi as weiApi;
 
 
-class weixin extends baseControler {
+class weixin extends homeBase {
 
-    private static $u_type;
-    private static $ts_type;
-    private static $uid_type;
-
-    private static $openid;
-    private static $access_token;
-
-    private static $weiApi;
-
+    protected static $MS;
 
     function __construct(){
-        new parent;
-
-        $s_get=I::get();//侦听url序列
-
-        //var_dump($s_get); exit;
-
-        self::$u_type=isset($s_get->u)?$s_get->u:'';
-        self::$ts_type=isset($s_get->ts)?$s_get->ts:'';
-        self::$uid_type=isset($s_get->uid)?$s_get->uid:'';//序列引用
+        parent::__construct();//初始化 父类的构造函数
 
 
-        model::init('weixin');//一个 controler 对应一个 同名 modeler
-        model::set();//加载 index modeler 可同时传参给 构造函数
+        self::$MS=model::model('weixin');//装载对应model时，自动连接数据库
 
-        //self::$weiApi=new weiApi();
-
-        self::$openid = isset($_SESSION[PREFIX.'openid']) ? trim($_SESSION[PREFIX.'openid']) : '';
-        self::$access_token = isset($_SESSION[PREFIX.'access_token']) ? trim($_SESSION[PREFIX.'access_token']) : '';
-
+        weiApi::init(self::$PA);//微信二级接口 身份初始化
 
     }
 
-    function testInit()//伪装验证
+
+    function test()//伪装验证
     {
 
-        unset( $_SESSION[PREFIX.'openid'] );//清除当前session openid
-        unset( $_SESSION[PREFIX.'access_token'] );//清除当前session access_token
+        //例子：./Home/?/weixin/test/u-Test888/ts-1/uid-0/
+        //例子：./Home/?/weixin/test/u-Test888/ts-1/uid-1/
 
-        //session_destroy();//
-
-        $MS=model::set();
-
-        $u_type=self::$u_type;
-        $ts_type=self::$ts_type;
-        $uid_type=self::$uid_type;//序列引用
-        //echo $u_type.$ts_type.$uid_type;//
+        $MS=self::$MS;
+        $u=tool::isSetRe( I::have('u') );
+        $ts=tool::isSetRe( I::have('ts') );
+        $uid=tool::isSetRe( I::have('uid') );//序列引用
 
         $hint['noData']=" 没有 access_token 或找不到当前'uid'. 如果没有 access_token请在微信登录一次非测试页，再回来用PC访问该测试页. ";
         $hint['noDataEn']="no token for this ' uid ' or no found this 'uid'. if no token, please Login on WeiXinApp then Comeback to Visit on PC";
 
-
-        if($u_type=='Test888' && $ts_type!='' && $uid_type!='')
+        if($u=='Test888' && $ts!='' && $uid!='')
         {
 
-            switch($ts_type){
+            switch($ts){
+                default:
+                    break;
                 case 0 :
-                    tool::jsonExit(array("state"=>'noDebug'));
+                    tool::mk_session(array('glob_usr'),1);
+                    session_unset();session_destroy();//
+                    tool::jsonExit(array("state"=>'noDebug',"SESSION"=>'unset'));
                     break;
                 case 1 :
+                    $whereArray['uid']=$uid;
+                    $user=$MS->rowSelect(self::$TB->USR,'*',$whereArray);
+                    //var_dump($user);exit;//
 
-                    //旧方式
-                    /*$db=$MS::$wpdb;
-                    $usrTest=$db->get_row($db->prepare("SELECT openid,access_token FROM ".USR." WHERE uid=%s AND access_token!='' ",$uid_type));*/
+                    if($user){
 
-                    //新方式
-                    $whereArray['uid']=$uid_type;
-                    $usrTest=$MS->rowSelect(USR,'*',$whereArray);
-                    //var_dump($usrTest);exit;//
+                        $glob_usr=new \stdClass();
+                        $glob_usr->sign=session_id();//设置服务器的sign
+                        $glob_usr->uid = $user->uid;
+                        $glob_usr->openid= $user->openid;
+                        $glob_usr->access_token= $user->access_token;
+                        tool::mk_session( array('glob_usr' => $glob_usr) );
+                        //var_dump( tool::get_session('glob_usr') );exit;//
 
-                    if($usrTest){
-                        $openid=$usrTest->openid;
-                        $access_token=$usrTest->access_token;
-                        $_SESSION[PREFIX.'openid']=$openid;
-                        $_SESSION[PREFIX.'access_token']=$access_token;
-                        $_SESSION[PREFIX.'uid']=$uid_type;
-                        //echo $_SESSION[PREFIX.'openid'].'<br/>'.$_SESSION[PREFIX.'access_token'];exit;//
-
-                        jump::head("./?/weixin/index/u-Test888/ts-1/uid-".$uid_type."/");//成功跳转index
+                        jump::head("./Public/index.html");//成功跳转index
 
                     }else{
 
-
-                        //旧方式
-                        /*$db=$MS::$wpdb;
-                        $usrTest = $db->get_results( $db->prepare("SELECT uid,nickname FROM ".USR." ORDER BY uid ASC") );*/
-
-                        //新方式
-                        $orderArray=array('uid','ASC');
+                        $orderArray['uid']='ASC';
+                        //$orderArray['limit']='0,5';//
                         $selectArray=array('uid','nickname');
-                        $usrTest=$MS->resultSelect(USR,$selectArray,'-',$orderArray);
+                        $usrTest=$MS->resultSelect(self::$TB->USR,$selectArray,'-',$orderArray);
+
+                        //var_dump($usrTest);exit;//
 
                         echo "| UID || NICK_NAME |"."<br/>";
                         foreach($usrTest as $k=>$v){
@@ -116,6 +89,7 @@ class weixin extends baseControler {
 
                     //tool::jsonExit(array("state"=>'debug'));
                     break;
+
             }
 
         }
@@ -125,124 +99,109 @@ class weixin extends baseControler {
 
     function index(){
 
-        $I=I::get();//侦听url序列
-        $sid_get=isset($I->sid)?$I->sid:'';//侦听url中的sid序列单元
-        //var_dump($sid_get);exit;//
+        $sid=tool::isSetRe( I::have('sid') );//侦听url中的sid序列单元
+        //var_dump($sid);exit;//
 
-        $MS=model::set();
-       // $weiApi=self::$weiApi;
-        $openid=self::$openid;
-        $access_token=self::$access_token;
+        $glob_usr=tool::get_session('glob_usr');//var_dump($glob_usr);//exit;//
+        $openid=$glob_usr->openid;
+        $access_token=$glob_usr->access_token;
         //var_dump($openid);var_dump($access_token);exit;//
 
         //$openid=true;$access_token=true;//
         if(!$openid||!$access_token)//没有$openid和$access_token的情况
         {
-            switch ($sid_get!=''){
-                default:
-                    //exit('http://wx.bangju.com/project/?/weixin/auth/');//
-                    weiApi::usrAuth("http://wx.bangju.com/Home/?/weixin/auth/","snsapi_userinfo");
-                    break;
-                case true :
-                    //exit("http://wx.bangju.com/project/?/weixin/auth/sid-".$sid_get);//
-                    weiApi::usrAuth("http://wx.bangju.com/Home/?/weixin/auth/sid-".$sid_get."/","snsapi_userinfo");
-                    break;
-            }
+
+
+            if($sid){ weiApi::usrAuth("http://wx.host.com/Home/?/weixin/auth/sid-".$sid."/","snsapi_base");exit; }
+
+            weiApi::usrAuth("http://wx.host.com/Home/?/weixin/auth/","snsapi_base");exit;
         }
 
 
-        $u_type=self::$u_type; $ts_type=self::$ts_type; $uid_type=self::$uid_type;//序列引用
-        if($u_type=='' && $ts_type=='' && $uid_type=='')//testInit序列判断
-        {
-
-                $data = weiApi::usrInfo($openid, $access_token);
-                $globeAccessToken = weiApi::globeAccessToken();
-                $data_g = weiApi::subscribe($openid, $globeAccessToken);
-                //var_dump($data);echo"<br/>";var_dump($data_g);exit;//
-
-                $dataArray = weiApi::userInfo($data, $data_g);//获取用户数据
-                $dataArray['openid'] = $openid;
-                $dataArray['access_token'] = $access_token;
-                $dataArray['time'] = time();
-                $ipGet = tool::get_ip();
-                $dataArray['ip'] = $ipGet;
-                //print_r($dataArray);exit;//
-
-                $whereArray['openid'] = $openid;
-                $user = $MS->rowSelect(USR, '*', $whereArray);//筛选
-                //var_dump($user);exit;//
-
-                if (!$user)//用户无登记的情况
-                {
-
-                    $userInsert = $MS->rowInsert(USR, $dataArray);
-                    if (!$userInsert) {
-                        exit("fail to add user !");
-                    }
-
-                    $user = $MS->rowSelect(USR, '*', $whereArray);
-                    $_SESSION[PREFIX . 'uid'] = $user->uid;//session 存入uid
-                    //exit($_SESSION[PREFIX.'uid']);//
-                } else //用户有登记的情况
-                {
-
-                    //更新微信用户资料
-                    $userUpdate = $MS->rowUpdate(USR, $dataArray, $whereArray);//检测到数据重复 会跳过更新
-
-                    $_SESSION[PREFIX . 'uid'] = $user->uid;
-                    //exit($_SESSION[PREFIX . 'uid']);//
-
-                }
-
-
+        if($sid){
+            //如果用户访问自己的分享链接 就跳到首页。
+            /*
+            $uid_get=$_SESSION[PREFIX.'uid']; if($sid_get==$uid_get){ jump::head("./Public/index.html"); }
+            */
+            jump::head("./Public/share.html#share=&sid=".$sid);exit;
         }
 
-
-        switch ($sid_get!=''){
-            default:
-                jump::head("./Public/index.html");
-                break;
-            case true :
-
-                //如果用户访问自己的分享链接 就跳到首页。
-/*                $uid_get=$_SESSION[PREFIX.'uid'];
-                if($sid_get==$uid_get){
-                    jump::head("./Public/index.html");
-                }*/
-
-                jump::head("./Public/share.html#share=&sid=".$sid_get);
-
-                break;
-        }
-
+        jump::head("./Public/index.html");
     }
 
     function auth(){
 
-        $openid = isset($_GET['openid']) ? trim($_GET['openid']) : '';
-        $access_token = isset($_GET['access_token']) ? trim($_GET['access_token']) : '';
-        //var_dump($openid);exit;//
+        $openid = tool::isSetRe($_GET['openid']);
+        $access_token = tool::isSetRe($_GET['access_token']);
+        //var_dump($openid);var_dump(access_token);exit;//
 
-        if (!$openid || !$access_token){
-            exit('fail to get openid or access_token.');
+        if (!$openid || !$access_token){ exit('fail to get openid or access_token.'); }
+
+        $MS=self::$MS;
+
+        ////准备 user 表 入库数据
+        $data = weiApi::usrInfo($openid, $access_token);
+        $globeAccessToken = weiApi::globeAccessToken();
+        $data_g = weiApi::subscribe($openid, $globeAccessToken);
+        //var_dump($data);echo"<br/>";var_dump($data_g);exit;//
+        $usrData = weiApi::usrDataMake($data, $data_g);//获取用户数据
+        $usrData->openid = $openid;
+        $usrData->access_token = $access_token;
+        //print_r($usrData);exit;//
+        $whereArray['openid'] = $openid;
+        //\\
+
+        ////检查式新增微信用户数据
+        $rowAddCheck=$MS->rowAddCheck(self::$TB->USR,'uid',$whereArray,$usrData);
+        //var_dump($rowAddCheck);exit;//
+        //\\
+
+        ////准备 user_info 表 入库数据
+        $user = $MS->rowSelect(self::$TB->USR, 'uid', $whereArray);//筛选
+        //var_dump($user);exit;//
+        $infoData=array();
+        if($user){
+            $infoData['uid']=$user->uid;
+            $infoData['photo']=$usrData->headimgurl;
+            $infoData['name']=strip_tags($usrData->nickname);
+            $infoData['sex']=$usrData->sex;
+            $infoData['type']='1';
+            $infoData['device']='0';
+        }
+        //\\
+
+        switch($rowAddCheck){
+            case 'insertOk'://用户无登记的情况
+
+                //新建用户数据
+                $userInsert = $MS->rowInsert(self::$TB->USR_INFO,$infoData);
+                if (!$userInsert) { exit ('$userInsert fail!'); }
+
+                break;
+            case 'updateOk'://用户有登记的情况
+
+                //更新微信用户资料
+                unset($whereArray);
+                $whereArray['uid']=$infoData['uid'];
+                $MS->rowAddCheck(self::$TB->USR_INFO,'uid',$whereArray,$infoData);//检测到数据重复 会跳过更新
+
+                break;
         }
 
 
-        $_SESSION[PREFIX.'openid'] = $openid;
-        $_SESSION[PREFIX.'access_token'] = $access_token;
 
-        //print_r($_SESSION[PREFIX.'openid']."<br/>".$_SESSION[PREFIX.'access_token']); exit;
+        $glob_usr=new \stdClass();
+        $glob_usr->sign=session_id();//设置服务器的sign
+        $glob_usr->uid = $user->uid;
+        $glob_usr->openid= $openid;
+        $glob_usr->access_token= $access_token;
+        tool::mk_session( array('glob_usr' => $glob_usr) );
+        //var_dump( tool::get_session('glob_usr') );exit;//
 
+        $sid=tool::isSetRe( I::have('sid') );
+        if($sid!=''){ jump::head("./?/weixin/index/sid-".$sid);exit; }
 
-        $I=I::get();
-        $sid_get=isset($I->sid)?$I->sid:'';
-
-        if($sid_get!=''){
-            jump::head("./?/weixin/index/sid-".$sid_get);
-        }else{
-            jump::head("./?/weixin/index/");
-        }
-
+        jump::head("./?/weixin/index");
 
     }
 

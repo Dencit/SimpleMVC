@@ -11,8 +11,16 @@
 	<meta http-equiv="Cache-Control" content="no-cache">
 	<meta name="x5-orientation" content="portrait">
 	<link rel="stylesheet" href="css/style.css" />
+
 	<!--<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>-->
 	<script src="../../Static/jquery/jquery-2.1.1.min.js"></script>
+
+    <script src="js/weivv_test.js"></script>
+    <!--<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" ></script>-->
+    <script type="text/javascript" src="../../Static/weixin/jweixin-1.0.0.js" ></script>
+    <script type="text/javascript" src="js/weixinJsApi.js" ></script>
+
+
 </head>
 <body>
 
@@ -29,23 +37,17 @@
 	<p>index</p>
 
 
-	<script src="../../Static/common/common.js"></script>
-	<script src="../../Static/common/ajax.js"></script>
-	<!--<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" ></script>-->
-	<script type="text/javascript" src="../../Static/weixin/jweixin-1.0.0.js" ></script>
-	<script type="text/javascript" src="../../Static/weixin/weixinShare.js" ></script>
+    <script>
 
-	<script>
+        wvv.init();//前端框架初始化
+
+        wvv.post('../?/indexAx/usrState','',function(result){
+            wvv.msgbox(result,2);//微信登陆检验
+        },1);
 
         $(document).ready(function(){
 
-            ajax.post('../?/index/usrState/',{"data":'usrState'},function(result){
-                ckUid(result);//微信登陆检验
-
-            },'1');
-
-			$playState='noPlay';
-			__jweixin();
+            wxja.noPlayShare();
 
 		});
 

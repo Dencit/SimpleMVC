@@ -6,11 +6,27 @@ use stdClass;
 
 class frameDebug{
 
+    static $FRAME;//框架配置对象
 
     function __construct(){
-
-
     }
+
+    static function init($FRAME){
+        self::$FRAME=$FRAME;
+    }
+
+    static function frameDebugExit($ecorrMsg)
+    {
+        switch(self::$FRAME){
+            case 'on':
+                self::frameDebugMsg($ecorrMsg);
+                break;
+            case 'off':
+                self::frameDebugMsg('fail');
+                break;
+        }
+    }
+
 
     private static function frameDebugMsg($ecorrMsg)
     {
@@ -24,18 +40,6 @@ class frameDebug{
         $errLog->errMsg='#####_____'.urlencode($ecorrMsg).'_____#####';//php5.4版本下中文转码
         $errLog->logTime=date('Y-m-d H:s:i',time());
         exit( urldecode( json_encode( $errLog ) ) );
-    }
-
-    public static function frameDebugExit($ecorrMsg)
-    {
-        switch(FRAM_DEBUG){
-            case 'on':
-                self::frameDebugMsg($ecorrMsg);
-                break;
-            case 'off':
-                self::frameDebugMsg('fail');
-                break;
-        }
     }
 
 } 

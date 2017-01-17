@@ -30,16 +30,21 @@ class controler{
     private static $this_scr_name;
     private static $this_req_uri;
 
-    function __construct(){
+    private static $FRAME;
+
+    function __construct($FRAME){
+
+        self::$FRAME=$FRAME;
 
         //self::$FD=new FD;
         self::$from="FROM::Library/Controlers/controler.class::";
 
-        self::$rootProj=new rootProj(ROOT_PROJECT,ROOT_CONTROLER);//【项目夹，目标文件夹】传入调用页 全局变量或变量
-        self::$urlRoute=new urlRoute;
+        self::$rootProj=new rootProj($FRAME->ROOT_PROJECT,$FRAME->ROOT_CONTROLER);//【项目夹，目标文件夹】传入调用页 全局变量或变量
+        self::$urlRoute=new urlRoute($FRAME);
 
         self::$this_scr_name=$_SERVER['SCRIPT_NAME'];
         self::$this_req_uri=$_SERVER['REQUEST_URI'];
+
 
     }
 
@@ -80,8 +85,10 @@ class controler{
     }
 
 
-    function uri($path_mode)
+    function listenUri($path_mode=null)
     {
+
+        if(empty($path_mode)){ $path_mode=self::$FRAME->URL_TYPE; }
 
         switch($path_mode){
 
@@ -94,7 +101,19 @@ class controler{
 
             case 'Path_Info':
 
-                $this_repl=self::$urlRoute->get();//路由数组
+                $this_repl=self::$urlRoute->get('Path_Info');//路由数组
+                //var_dump($this_repl);//
+
+                $url_cont=!empty($this_repl[0])?$this->trimall($this_repl[0]):'';
+                $url_func=!empty($this_repl[1])?$this->trimall($this_repl[1]):'';
+
+                $this->urlCont=$url_cont;//公用 控制器 变量
+                $this->urlFunc=$url_func;//公用 方法页 变量
+
+                break;
+            case 'Rewrite':
+
+                $this_repl=self::$urlRoute->get('Rewrite');//路由数组
                 //var_dump($this_repl);//
 
                 $url_cont=!empty($this_repl[0])?$this->trimall($this_repl[0]):'';
@@ -105,7 +124,6 @@ class controler{
 
                 break;
         }
-
 
 
         if( empty($url_cont)){ $url_state='ec0';}

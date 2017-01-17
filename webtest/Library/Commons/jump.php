@@ -10,6 +10,29 @@ class jump{
 
     }
 
+    public static function alert($messge = '', $url = 'unJump')
+    {
+        //$messge = self::conStr($messge);
+        switch ($url) {
+            case 'back':
+                $jump = "location.href='javascript:history.go(-1);'";
+                break;
+            case 'index':
+                $jump="location.href='./'";
+                break;
+            case 'unJump':
+                $jump='';
+                break;
+            default:
+                $jump="location.href='".$url."'";
+                break;
+        }
+        $alert = '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />' .
+            "<script>alert('$messge');".$jump."</script>";
+        echo $alert;
+        exit;
+    }
+
     public static function alertTo($messge = '', $url = 'back')
     {
         //$messge = self::conStr($messge);

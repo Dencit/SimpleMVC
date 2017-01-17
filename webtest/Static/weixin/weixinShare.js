@@ -2,10 +2,10 @@
 var url = location.href.split('#')[0];
 url = encodeURIComponent(url);
 
-var appid = "wxa544f4ffe0ce6025";
-var ajaxLink= "http://api.bangju.com/weixin/jsApi.php";
-var allLink="http://wx.bangju.com/project";
-var allImgLink="http://wx.bangju.com/project/Public/images";
+var appid = "[CORP_ID]";
+var ajaxLink= "http://api.host.com/weixin/jsApi.php";
+var allLink="http://wx.host.com/project";
+var allImgLink="http://wx.host.com/project/Public/images";
 
 
 //在这里定义微信分享内容
@@ -58,7 +58,7 @@ $playState='noPlay';
 function __jweixin(){
 
     $.ajax({
-        url:ajaxLink+"?url="+url+"&t="+new Date().getTime(),
+        url:ajaxLink+"&url="+url+"&t="+new Date().getTime(),
         dataType:"json",
         xhrFields: {
             withCredentials: true

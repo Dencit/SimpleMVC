@@ -10,6 +10,156 @@ class tool
 
     }
 
+    static function isSetRe($data){
+
+        $is_data=isset($data);
+        $n_data=$is_data?$data:'';
+
+        return $n_data;
+
+    }
+
+    //处理值get值 防报错
+    static function is_Get($string){
+
+        //获取 $string字符串 对应的 $_POST 键值
+        if(is_string($string)){
+            $is_get=@$_GET[$string];
+            $value=isset($is_get)?$is_get:null;
+            return $value;
+        }
+
+        //获取 $string键值对中 值名与$_POST键名 对应的 值
+        if(is_array($string)||is_object($string)){
+            $new_arr=[];
+            foreach($string as $key=>$val){
+                $is_get=@$_GET[$val];
+                $new_arr[$key]=isset($is_get)?$is_get:null;
+            }
+
+            //var_dump($new_arr);//
+            return $new_arr;
+        }
+
+        return false;
+    }
+
+
+    /*$data['food_qual']='foodQu';
+    $data['serv_qual']='serveQu';
+    $data['envi_qual']='environmentQu';
+    $data['advise']='advise_info';
+    $data=tool::is_Post($data);
+    var_dump($data);*/
+
+    //处理值post值 防报错
+    static function is_Post($string){
+
+        //获取 $string字符串 对应的 $_POST 键值
+        if(is_string($string)){
+            $is_post=@$_POST[$string];
+            $value=isset($is_post)?$is_post:$string;
+            return $value;
+        }
+
+        //获取 $string键值对中 值名与$_POST键名 对应的 值
+        if(is_array($string)||is_object($string)){
+            $new_arr=[];
+            foreach($string as $key=>$val){
+                $is_post=@$_POST[$val];
+                $new_arr[$key]=isset($is_post)?$is_post:$val;
+            }
+
+            //var_dump($new_arr);//
+            return $new_arr;
+        }
+
+        return false;
+    }
+
+
+    /*
+    $kv_array['one']=1;
+    $kv_array['two']=2;
+    $kv_array['third']=3;
+    tool::mk_session($kv_array);
+    */
+    static function mk_session($kv_array='',$unset=''){
+        if(is_array($kv_array)){
+            foreach($kv_array as $k=>$v){
+                //echo $k.'||'.$v.'<br/>';
+
+                if($unset!='') unset($_SESSION[PREFIX.$k]);
+                else $_SESSION[PREFIX.$k]=$v;
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    /*
+    $no_array[0]='one';
+    $no_array[1]='two';
+    $no_array[2]='third';
+    var_dump( tool::get_session($no_array) );
+    */
+    static  function get_session($no_array='',$unset=''){
+
+        if(is_array($no_array)){
+            $kv_array=new \stdClass();
+            foreach($no_array as $k=>$v){
+                if($unset!=''){ unset( $_SESSION[PREFIX.$v]) ; }
+                elseif(!isset($_SESSION[PREFIX.$v])) continue;
+                else $kv_array->$v=$_SESSION[PREFIX.$v];
+            }
+            if($unset!='') return true;
+            elseif( end($kv_array)==null ) return false;
+            else return $kv_array;
+        }elseif( is_string($no_array) ){
+
+            if($unset!=''){ unset( $_SESSION[PREFIX.$no_array] ); }
+            elseif( !isset($_SESSION[PREFIX.$no_array]) ) return false;
+            else return $_SESSION[PREFIX.$no_array];
+
+        }
+
+        return false;
+    }
+
+    static function setTimeOut($type,$step,$end){
+
+        $step=floatval($step);$end=floatval($end);
+
+        $time_ax=self::get_session($type);
+        $time_ax+=$step;
+        self::mk_session(array($type=>$time_ax));
+        $time_ax=self::get_session($type);
+
+        if($time_ax>=$end){
+            tool::get_session($type,'1');
+            return false;
+        }
+
+        return $time_ax;
+    }
+
+    static function ip()
+    {
+        if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
+            $ip = $_SERVER["HTTP_CLIENT_IP"];
+        } else if (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+            $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+        } else if (!empty($_SERVER["REMOTE_ADDR"])) {
+            $ip = $_SERVER["REMOTE_ADDR"];
+        } else {
+            $ip = '';
+        }
+        preg_match("/[\d\.]{7,15}/", $ip, $ips);
+        $ip = isset($ips[0]) ? $ips[0] : 'unknown';
+        return $ip;
+    }
+
     static function get_ip()
     {
         if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
@@ -38,6 +188,17 @@ class tool
 
     static function jsonExit($arr=array()){
         $json_obj=json_encode($arr);
+        exit($json_obj);
+    }
+
+    static function jsonResult($arr=array(),$errcode='',$errmsg='',$redirect=''){
+
+        if($errcode!=''){ $result['errcode']=$errcode; }
+        if($errmsg!=''){$result['errmsg']=$errmsg;}
+        if($redirect!=''){$result['redirect']=$redirect;}
+
+        $result['data']=$arr;
+        $json_obj=json_encode($result);
         exit($json_obj);
     }
 
@@ -99,6 +260,14 @@ class tool
     }
 
     static function clearLogText($data){
+
+    }
+
+    public static function browser(){
+
+        //echo $_SERVER['HTTP_USER_AGENT'];
+        $browser = get_browser();
+        return $browser;
 
     }
 

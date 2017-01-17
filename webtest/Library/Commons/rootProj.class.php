@@ -21,6 +21,7 @@ class rootProj {
 
         //self::$ts='123';
 
+
     }
 
     public function getFolder()//获取 文件夹绝对路径
@@ -36,7 +37,7 @@ class rootProj {
             $to_folder=$webRoot.DIRECTORY_SEPARATOR.$in_Proj_url.DIRECTORY_SEPARATOR.$to_folder_url;
         }
 
-        //exit($to_folder);//
+        //exit($to_folder);//调试输出目录地址
 
         if(!is_dir($to_folder)){
             FD::frameDebugExit('网站根目录没有  ~ '.$to_folder_url.' ~  目录');

@@ -27,8 +27,8 @@ class aliDayu{
         $Param="{code:'999999',product:''}",
         $TemplateCode="SMS_12355379"
     ){
-        self::$appkey='【大于短信密匙】';
-        self::$secret='【大于短信密文】';
+        self::$appkey='23409829';
+        self::$secret='94fb7df84c31116aab83241252f6b561';
 
         self::$SmsType='normal';
 
