@@ -30,8 +30,8 @@ class weixin extends homeBase {
     function test()//伪装验证
     {
 
-        //例子：./Home/?/weixin/test/u-Test888/ts-1/uid-0/
-        //例子：./Home/?/weixin/test/u-Test888/ts-1/uid-1/
+        //例子：./Home/?/weixin/test/u-[PASS_WORD]/ts-1/uid-0/
+        //例子：./Home/?/weixin/test/u-[PASS_WORD]/ts-1/uid-1/
 
         $MS=self::$MS;
         $u=tool::isSetRe( I::have('u') );
@@ -41,7 +41,7 @@ class weixin extends homeBase {
         $hint['noData']=" 没有 access_token 或找不到当前'uid'. 如果没有 access_token请在微信登录一次非测试页，再回来用PC访问该测试页. ";
         $hint['noDataEn']="no token for this ' uid ' or no found this 'uid'. if no token, please Login on WeiXinApp then Comeback to Visit on PC";
 
-        if($u=='Test888' && $ts!='' && $uid!='')
+        if($u=='[PASS_WORD]' && $ts!='' && $uid!='')
         {
 
             switch($ts){

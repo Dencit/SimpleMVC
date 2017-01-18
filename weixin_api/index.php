@@ -7,7 +7,7 @@ require_once("./app/app.php");
 $refresh = isset($_GET["r"]) ? trim($_GET["r"]) : "";
 
 $key = isset($_GET["k"]) ? trim($_GET["k"]) : "";
-if("Test888" != $key){
+if("[PASS_WORD]" != $key){
 
 }
 
