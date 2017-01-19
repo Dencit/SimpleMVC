@@ -5,8 +5,10 @@
 <br/>Email  ：632112883@qq.com
 <br/>作者将在工作中实践本框架，根据实际情况优化，欢迎广大牛人提供设计思想、建议。
 
-<br/>最新框架使用教程：reme_2017.docx    https://github.com/Dencit/SimpleMVC/wiki
-<br/>框架使用教程：reme_2016.docx
+<br/>最新框架使用教程：reme_2017.docx
+<br/>在线文档：https://github.com/Dencit/SimpleMVC/wiki
+
+<br/>旧框架使用教程：reme_2016.docx
 
 #主要更新节点：
 <br/>2016-06-15 : 架构初步定型。
