@@ -10,6 +10,12 @@
 
 <br/>旧框架使用教程：reme_2016.docx
 
+
+<br/>具体项目源码参考：
+https://github.com/Dencit/Act
+https://github.com/Dencit/SmartRestaurant
+
+
 #主要更新节点：
 <br/>2016-06-15 : 架构初步定型。
 <br/>2017-01-17 : 对旧架构局部做了重构，完成框架80%常用功能, 优化单点负载性能。
